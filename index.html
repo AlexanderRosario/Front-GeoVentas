@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAPA</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
+    <link rel="stylesheet" href="stylo.css">
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/particles.js"></script> 
+    <script src="particle.js"></script>
+    <script src="accion.js"></script>
+</head>
+<body>
+    <div id="particles-js"></div>
+    <header class="header">
+        <h2>Datos demograficos</h2>
+    </header>
+
+    <div class="container">
+        <div class="search-container">
+            <input type="text" id="location" placeholder="zona o provincia">
+            <button id="Local">Buscar</button>
+            <div id="resultado"></div>
+    </div>
+
+        <div id="map-container">
+            <div id="map"></div>
+            <div id="mini-map"></div>
+        </div>
+    </div>
+</body>
+</html>
