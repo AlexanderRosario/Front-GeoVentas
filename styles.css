@@ -1,0 +1,9 @@
+/* styles.css */
+.marker {
+    background-image: url('https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png');
+    background-size: cover;
+    width: 25px;
+    height: 41px;
+    margin-left: -12px;
+    margin-top: -41px;
+}

@@ -3,32 +3,171 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MAPA</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
-    <link rel="stylesheet" href="stylo.css">
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/particles.js"></script> 
-    <script src="particle.js"></script>
-    <script src="accion.js"></script>
+    <title>Mapa Interactivo RD</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png">
+    <style>
+        .marker {
+            background-image: url('https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png');
+            background-size: cover;
+            width: 25px;
+            height: 41px;
+            margin-left: -12px;
+            margin-top: -41px;
+        }
+    </style>
 </head>
-<body>
-    <div id="particles-js"></div>
-    <header class="header">
-        <h2>Datos demograficos</h2>
-    </header>
+<body class="bg-gray-900 text-gray-100">
+    <div class="container mx-auto p-4">
+        <!-- Barra de navegación -->
+        <nav class="bg-gray-800 rounded-lg mb-4 p-2">
+            <div class="flex justify-between items-center">
+                <h1 class="text-xl font-bold">Mapa Interactivo RD</h1>
+                <div class="space-x-4">
+                    <button class="px-3 py-1 bg-gray-700 rounded hover:bg-gray-600">Inicio</button>
+                    <button class="px-3 py-1 bg-gray-700 rounded hover:bg-gray-600">Lugares</button>
+                    <button class="px-3 py-1 bg-gray-700 rounded hover:bg-gray-600">Rutas</button>
+                    <button class="px-3 py-1 bg-gray-700 rounded hover:bg-gray-600">Acerca de</button>
+                </div>
+            </div>
+        </nav>
 
-    <div class="container">
-        <div class="search-container">
-            <input type="text" id="location" placeholder="zona o provincia">
-            <button id="Local">Buscar</button>
-            <div id="resultado"></div>
-    </div>
+        <div class="flex">
+            <!-- Barra lateral de control -->
+            <div class="w-64 bg-gray-800 rounded-lg p-4 h-screen">
+                <div class="mb-4">
+                    <label class="block mb-2">Buscar lugar o coordenadas:</label>
+                    <input type="text" id="searchInput" class="w-full p-2 bg-gray-700 rounded p-2 text-white">
+                    <button onclick="searchLocation()" class="mt-2 w-full bg-blue-600 hover:bg-blue-700 p-2 rounded">
+                        Buscar
+                    </button>
+                </div>
 
-        <div id="map-container">
-            <div id="map"></div>
-            <div id="mini-map"></div>
+                <div class="mb-4">
+                    <label class="block mb-2">Filtrar por categoría:</label>
+                    <select id="categoryFilter" class="w-full p-2 bg-gray-700 rounded">
+                        <option value="">Todos</option>
+                        <option value="playas">Playas</option>
+                        <option value="montanas">Montañas</option>
+                        <option value="ciudades">Ciudades</option>
+                    </select>
+                </div>
+
+                <div class="mb-4">
+                    <label class="block mb-2">Coordenadas del punto seleccionado:</label>
+                    <input type="text" id="coordinateInput" class="w-full p-2 bg-gray-700 rounded p-2 text-white" readonly>
+                </div>
+
+                <div class="mb-4">
+                    <button onclick="addMarker()" class="w-full bg-blue-600 hover:bg-blue-700 p-2 rounded">
+                        Agregar punto en el mapa
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mapa -->
+            <div class="flex-1">
+                <div id="map" class="h-screen rounded-lg"></div>
+            </div>
         </div>
     </div>
+
+    <script>
+        // Inicializar el mapa
+        var map = L.map('map').setView([19.4326, -70.6787], 8);
+
+        // Agregar capa de tiles
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+
+        let marker;
+        let circle;
+
+        // Función de búsqueda
+        function searchLocation() {
+            const searchTerm = document.getElementById('searchInput').value;
+            if (!searchTerm) return;
+
+            // Geocodificación
+            fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${searchTerm}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.length > 0) {
+                        const coords = [data[0].lat, data[0].lon];
+                        map.setView(coords, 12);
+
+                        // Limpiar marcadores anteriores
+                        if (map.hasLayer(marker)) map.removeLayer(marker);
+                        if (map.hasLayer(circle)) map.removeLayer(circle);
+
+                        // Agregar marcador personalizado
+                        marker = L.marker(coords, {
+                            icon: L.divIcon({
+                                className: 'marker',
+                                html: '<div></div>',
+                                iconSize: [25, 41]
+                            })
+                        }).addTo(map);
+
+                        // Agregar círculo de 1km
+                        circle = L.circle(coords, {
+                            color: 'red',
+                            radius: 1000,
+                        }).addTo(map);
+
+                        marker.bindPopup(`<b>${data[0].display_name}</b>`).openPopup();
+                    }
+                });
+        }
+
+        // Función para agregar punto en el mapa
+        function addMarker() {
+            map.on('click', function(e) {
+                const coords = [e.latlng.lat, e.latlng.lng];
+                if (map.hasLayer(marker)) map.removeLayer(marker);
+                if (map.hasLayer(circle)) map.removeLayer(circle);
+                marker = L.marker(coords, {
+                    icon: L.divIcon({
+                        className: 'marker',
+                        html: '<div></div>',
+                        iconSize: [25, 41]
+                    })
+                }).addTo(map);
+
+                circle = L.circle(coords, {
+                    color: 'red',
+                    radius: 1000,
+                }).addTo(map);
+
+                document.getElementById('coordinateInput').value = `Lat: ${coords[0]}, Lng: ${coords[1]}`;
+
+                // Enviar coordenadas y lugar a la API
+                const lugar = 'nombre_del_lugar'; // Cambia esto según tu lógica
+                const data = {
+                    coordenadas: { lat: coords[0], lng: coords[1] },
+                    lugar: lugar
+                };
+
+                fetch('https://tu-api.com/endpoint', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Success:', data);
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+            });
+        }
+
+        // Llamar a la función para habilitar la adición de marcadores
+        addMarker();
+    </script>
 </body>
 </html>
