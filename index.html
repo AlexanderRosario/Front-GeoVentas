@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapa Interactivo RD</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js"></script>
+</head>
+<body>
+    <div class="container">
+        <!-- Barra de navegación -->
+        <nav class="navbar">
+            <div class="nav-content">
+                <h1 class="title">Mapa Interactivo RD</h1>
+                <div class="nav-buttons">
+                    <button>Inicio</button>
+                    <button>Lugares</button>
+                    <button>Rutas</button>
+                    <button>Acerca de</button>
+                </div>
+            </div>
+        </nav>
+
+        <div class="main">
+            <!-- Barra lateral de control -->
+            <div class="sidebar">
+                <div>
+                    <label>Buscar lugar o coordenadas:</label>
+                    <input type="text" id="searchInput" placeholder="Buscar ubicación">
+                    <button id="searchBtn">Buscar</button>
+                </div>
+
+                <div>
+                    <label>Filtrar por categoría:</label>
+                    <select id="categoryFilter">
+                        <option value="">Todos</option>
+                        <option value="playas">Playas</option>
+                        <option value="montanas">Montañas</option>
+                        <option value="ciudades">Ciudades</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label>Coordenadas del punto seleccionado:</label>
+                    <input type="text" id="coordinateInput" readonly>
+                </div>
+
+                <div>
+                    <button id="addMarkerBtn">Agregar punto en el mapa</button>
+                </div>
+
+                <div id="placeDetails" class="mt-4">
+                    <h2 class="text-xl font-bold">Detalles del lugar</h2>
+                    <p><strong>Nombre:</strong> <span id="placeName"></span></p>
+                    <p><strong>Descripción:</strong> <span id="placeDescription"></span></p>
+                    <p><strong>Coordenadas:</strong> <span id="placeCoordinates"></span></p>
+                    <p><strong>Población:</strong> <span id="placePopulation"></span></p> <!-- Nuevo campo para población -->
+                </div>
+                
+            </div>
+
+            <!-- Mapa -->
+            <div class="map-container">
+                <div id="map"></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
