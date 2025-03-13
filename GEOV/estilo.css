@@ -1,0 +1,111 @@
+/* Estilos generales */
+body {
+    background-color: #1a202c;
+    color: #f7fafc;
+    font-family: Arial, sans-serif;
+}
+
+/* Contenedor principal */
+.container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 1rem;
+}
+
+/* Navbar */
+.navbar {
+    background-color: #2d3748;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 1rem;
+}
+
+.nav-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.title {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.nav-buttons button {
+    background-color: #4a5568;
+    border-radius: 5px;
+    padding: 8px 12px;
+    margin-left: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.nav-buttons button:hover {
+    background-color: #718096;
+}
+
+/* Main layout */
+.main {
+    display: flex;
+}
+
+/* Sidebar */
+.sidebar {
+    width: 250px;
+    background-color: #2d3748;
+    border-radius: 8px;
+    padding: 15px;
+    height: 100vh;
+}
+
+.sidebar div {
+    margin-bottom: 1rem;
+}
+
+.sidebar label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.sidebar input,
+.sidebar select {
+    width: 100%;
+    padding: 8px;
+    background-color: #4a5568;
+    color: white;
+    border-radius: 5px;
+    border: none;
+}
+
+.sidebar button {
+    width: 100%;
+    background-color: #3182ce;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.sidebar button:hover {
+    background-color: #2b6cb0;
+}
+
+/* Mapa */
+.map-container {
+    flex: 1;
+    padding-left: 15px;
+}
+
+#map {
+    height: 100vh;
+    border-radius: 8px;
+}
+
+/* Estilo de marcador */
+.marker {
+    background-color: red;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    border: 2px solid white;
+}
